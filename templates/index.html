@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}人脸识别系统 - 首页{% endblock %}
+{% block content %}
+<div class="hero">
+    <h1>🤖 基于深度学习的<br>AI 人脸识别系统</h1>
+    <p class="hero-desc">Flask + OpenCV + Keras + sklearn 实现</p>
+    <div class="tech-tags">
+        <span class="tag">OpenCV</span>
+        <span class="tag">Keras</span>
+        <span class="tag">Flask</span>
+        <span class="tag">scikit-learn</span>
+    </div>
+</div>
+
+<div class="card-container">
+    <a href="/camera" class="card">
+        <div class="card-icon">📷</div>
+        <h2>摄像头实时识别</h2>
+        <p>使用浏览器摄像头，实时检测和识别人脸，帧间平滑处理</p>
+        <span class="card-btn">开始识别 →</span>
+    </a>
+    <a href="/upload" class="card">
+        <div class="card-icon">📤</div>
+        <h2>上传照片识别</h2>
+        <p>上传一张照片，系统自动检测人脸并标注识别结果</p>
+        <span class="card-btn">上传照片 →</span>
+    </a>
+</div>
+{% endblock %}

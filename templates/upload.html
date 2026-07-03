@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% block title %}上传照片识别{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h2>📤 上传照片识别</h2>
+    <p>上传一张照片，系统自动检测人脸并进行识别</p>
+</div>
+
+<div class="upload-container">
+    <div class="upload-left">
+        <div class="upload-area" id="upload-area">
+            <div class="upload-icon">📤</div>
+            <p>拖拽图片到此处，或点击选择文件</p>
+            <p class="upload-hint">支持 JPG / PNG 格式</p>
+            <input type="file" id="file-input" accept="image/jpeg,image/png" hidden>
+            <button id="btn-select" class="btn btn-primary">选择图片</button>
+        </div>
+        <div class="preview-wrapper" id="preview-wrapper" style="display:none;">
+            <img id="preview-img" src="" alt="预览">
+        </div>
+    </div>
+    <div class="upload-right">
+        <div class="result-panel" id="result-panel" style="display:none;">
+            <h3>识别结果</h3>
+            <div id="result-image-container">
+                <img id="result-image" src="" alt="标注结果">
+            </div>
+            <div id="result-details">
+                <div class="result-item">
+                    <span class="result-item-label">识别身份：</span>
+                    <span id="result-label" class="result-item-value">—</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-item-label">置信度：</span>
+                    <span id="result-confidence" class="result-item-value">—</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-item-label">检测到人脸：</span>
+                    <span id="result-face-count" class="result-item-value">—</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-item-label">特征距离：</span>
+                    <span id="result-distance" class="result-item-value">—</span>
+                </div>
+            </div>
+            <button id="btn-reset" class="btn btn-secondary" style="margin-top:1rem;">重新识别</button>
+        </div>
+        <div class="empty-panel" id="empty-panel">
+            <p>👆 请先选择一张图片</p>
+        </div>
+    </div>
+</div>
+
+<script>
+const fileInput = document.getElementById('file-input');
+const btnSelect = document.getElementById('btn-select');
+const uploadArea = document.getElementById('upload-area');
+const previewWrapper = document.getElementById('preview-wrapper');
+const previewImg = document.getElementById('preview-img');
+const resultPanel = document.getElementById('result-panel');
+const emptyPanel = document.getElementById('empty-panel');
+const resultImage = document.getElementById('result-image');
+const resultLabel = document.getElementById('result-label');
+const resultConfidence = document.getElementById('result-confidence');
+const resultFaceCount = document.getElementById('result-face-count');
+const btnReset = document.getElementById('btn-reset');
+
+btnSelect.addEventListener('click', () => fileInput.click());
+uploadArea.addEventListener('click', () => fileInput.click());
+
+uploadArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadArea.classList.add('drag-over');
+});
+uploadArea.addEventListener('dragleave', () => {
+    uploadArea.classList.remove('drag-over');
+});
+uploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadArea.classList.remove('drag-over');
+    if (e.dataTransfer.files.length) {
+        handleFile(e.dataTransfer.files[0]);
+    }
+});
+
+fileInput.addEventListener('change', () => {
+    if (fileInput.files.length) handleFile(fileInput.files[0]);
+});
+
+function handleFile(file) {
+    if (!file.type.startsWith('image/')) {
+        alert('请上传图片文件');
+        return;
+    }
+    // 显示预览
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        previewImg.src = e.target.result;
+        uploadArea.style.display = 'none';
+        previewWrapper.style.display = 'block';
+        uploadPredict(file);
+    };
+    reader.readAsDataURL(file);
+}
+
+async function uploadPredict(file) {
+    emptyPanel.style.display = 'none';
+    resultPanel.style.display = 'block';
+    resultPanel.querySelector('h3').textContent = '⏳ 识别中...';
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+        const resp = await fetch('/predict_upload', { method: 'POST', body: formData });
+        const data = await resp.json();
+
+        if (data.success) {
+            resultImage.src = data.annotated_url;
+            resultPanel.querySelector('h3').textContent = '✅ 识别完成';
+
+            if (data.faces.length > 0) {
+                const face = data.faces[0];
+                resultLabel.textContent = face.label;
+                resultConfidence.textContent = (face.confidence * 100).toFixed(1) + '%';
+                resultFaceCount.textContent = data.faces.length + ' 张人脸';
+                if (face.distance !== undefined) {
+                    document.getElementById('result-distance').textContent = face.distance.toFixed(4);
+                }
+            } else {
+            resultLabel.textContent = '未检测到人脸';
+            resultConfidence.textContent = '—';
+            resultFaceCount.textContent = '0';
+            document.getElementById('result-distance').textContent = '—';
+            }
+        } else {
+            resultPanel.querySelector('h3').textContent = '❌ 识别失败';
+            resultLabel.textContent = data.error || '未知错误';
+        }
+    } catch (err) {
+        resultPanel.querySelector('h3').textContent = '❌ 请求失败';
+        resultLabel.textContent = err.message;
+    }
+}
+
+btnReset.addEventListener('click', () => {
+    uploadArea.style.display = 'flex';
+    previewWrapper.style.display = 'none';
+    resultPanel.style.display = 'none';
+    emptyPanel.style.display = 'flex';
+    fileInput.value = '';
+});
+</script>
+{% endblock %}

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}人脸识别系统{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">🤖 FaceRecognition</a>
+            <ul class="nav-links">
+                <li><a href="/" class="{% if request.path == '/' %}active{% endif %}">首页</a></li>
+                <li><a href="/camera" class="{% if request.path == '/camera' %}active{% endif %}">📷 摄像头识别</a></li>
+                <li><a href="/upload" class="{% if request.path == '/upload' %}active{% endif %}">📤 上传识别</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 内容区 -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-container">
+            <p>基于深度学习的 AI 人脸识别系统 · Flask + OpenCV + Keras + sklearn</p>
+        </div>
+    </footer>
+</body>
+</html>
