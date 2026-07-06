@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>注册 - AI 人脸识别系统</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card register-card">
+            <h1 class="auth-title">创建账号</h1>
+
+            <div id="auth-message" class="auth-message" style="display:none"></div>
+
+            <!-- ===== 第一步：填写信息 ===== -->
+            <div id="step-form" class="auth-form">
+                <div class="form-group">
+                    <label>用户名 <span class="required">*</span></label>
+                    <input type="text" id="reg-username" placeholder="至少 3 个字符" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label>密码 <span class="required">*</span></label>
+                    <input type="password" id="reg-password" placeholder="至少 6 个字符" autocomplete="new-password">
+                </div>
+                <div class="form-group">
+                    <label>真实姓名 <span class="required">*</span></label>
+                    <input type="text" id="reg-name" placeholder="请输入您的姓名" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label>手机号码 <span class="required">*</span></label>
+                    <input type="tel" id="reg-phone" placeholder="请输入 11 位手机号" maxlength="11" autocomplete="off">
+                </div>
+                <button class="btn btn-primary" onclick="doRegister()">下一步：录入人脸</button>
+            </div>
+
+            <!-- ===== 第二步：录入人脸 ===== -->
+            <div id="step-face" class="auth-form" style="display:none">
+                <div class="face-login-area">
+                    <video id="face-video" autoplay playsinline muted></video>
+                    <canvas id="face-canvas" style="display:none"></canvas>
+                    <div id="face-status" class="face-status">请正对摄像头，点击下方按钮开始采集</div>
+                    <div id="face-progress" class="face-progress" style="display:none">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                        <span id="progress-text">已采集 0 张（建议至少 10 张）</span>
+                    </div>
+                </div>
+                <div class="face-btns">
+                    <button class="btn btn-primary" id="btn-capture-face" onclick="startFaceCapture()">开始采集人脸</button>
+                    <button class="btn btn-outline" id="btn-stop-face" onclick="stopFaceCapture()" style="display:none">停止采集</button>
+                    <button class="btn btn-success" id="btn-finish-reg" onclick="finishRegistration()" style="display:none">完成注册</button>
+                </div>
+            </div>
+
+            <div class="auth-switch">
+                <span>已有账号？</span>
+                <a href="{{ url_for('login_page') }}" class="register-link">立即登录</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+</body>
+</html>

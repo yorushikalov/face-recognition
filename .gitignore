@@ -12,13 +12,18 @@ __pycache__/
 # 训练数据
 data/facedb/
 data/*.npy
+data/*.db
+
+# 上传的文件
+static/uploads/
 
 # 模型文件（太大，不提交到Git）
 models/*.h5
 models/*.pkl
 models/*.hdf5
 
-# 杂项
+# 私密配置（含 token 等敏感信息）
+notify.py
 .DS_Store
 Thumbs.db
 *.log

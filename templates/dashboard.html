@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人中心 - AI 人脸识别系统</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="dashboard-card">
+            <div class="dashboard-header">
+                <div class="avatar">{{ user.real_name[0] }}</div>
+                <h1>欢迎，{{ user.real_name }}</h1>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">用户 ID</span>
+                    <span class="info-value">{{ user.id }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">用户名</span>
+                    <span class="info-value">{{ user.username }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">真实姓名</span>
+                    <span class="info-value">{{ user.real_name }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">手机号码</span>
+                    <span class="info-value">{{ user.phone }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">人脸数据</span>
+                    <span class="info-value">
+                        {% if user.face_embedding is not none %}
+                            [已录入] {{ user.face_count }} 张
+                        {% else %}
+                            [未录入]
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">注册时间</span>
+                    <span class="info-value">{{ user.created_at }}</span>
+                </div>
+            </div>
+
+            <div class="dashboard-actions">
+                <a href="{{ url_for('index') }}" class="btn btn-outline">返回首页</a>
+                <a href="{{ url_for('logout') }}" class="btn btn-danger">退出登录</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

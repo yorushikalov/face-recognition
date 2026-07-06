@@ -1,0 +1,45 @@
+"""
+notify.py.example — 微信推送通知模块模板
+
+使用 PushPlus 实现注册/登录/登出的微信通知。
+
+配置步骤：
+1. 访问 https://www.pushplus.plus，微信扫码登录
+2. 点「发送消息」→「一对多消息」，复制你的 Token
+3. 将本文件重命名为 notify.py，并填入你的 Token
+"""
+
+import requests
+
+# ====== 配置区 ======
+# 访问 https://www.pushplus.plus，微信扫码，复制你的 token 填这里
+PUSHPLUS_TOKEN = "你的PushPlus Token"
+
+_enabled = PUSHPLUS_TOKEN != "你的PushPlus Token"
+
+
+def _send(title, content):
+    if not _enabled:
+        print(f"[Notify SKIP] {title}: {content}")
+        return
+    try:
+        requests.post(
+            "https://www.pushplus.plus/send",
+            json={"token": PUSHPLUS_TOKEN, "title": title, "content": content},
+            timeout=5,
+        )
+    except Exception as e:
+        print(f"[Notify ERROR] {e}")
+
+
+def user_registered(real_name):
+    _send("新用户注册", f"姓名为 {real_name} 的用户完成注册！")
+
+
+def user_logged_in(real_name, method=""):
+    info = f"通过{method}" if method else ""
+    _send("用户登录", f"{real_name} 的用户{info}登录了！")
+
+
+def user_logged_out(real_name):
+    _send("用户登出", f"{real_name} 用户登出了！")

@@ -50,6 +50,15 @@ body {
 }
 .nav-links li a:hover { background: rgba(255,255,255,0.15); color: #fff; }
 .nav-links li a.active { background: rgba(255,255,255,0.25); color: #fff; }
+.nav-links li a.nav-login-btn {
+    background: rgba(255,255,255,0.9);
+    color: #1a73e8;
+    font-weight: 600;
+}
+.nav-links li a.nav-login-btn:hover {
+    background: #fff;
+    color: #1557b0;
+}
 
 /* ===== 主内容区 ===== */
 .main-content {

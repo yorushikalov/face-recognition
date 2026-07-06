@@ -92,3 +92,11 @@ THRESHOLD_MULTIPLIER = 1.8  # 越大越容易识别，越小越严格
 - 训练过程使用 CPU，无需 GPU
 - 采集照片时确保光线充足、面部清晰
 - 单用户识别效果佳，多用户需重新采集数据并训练
+
+## 微信通知（可选）
+
+系统支持通过 PushPlus 向微信推送**注册/登录/登出**通知：
+
+1. 访问 [pushplus.plus](https://www.pushplus.plus)，微信扫码登录
+2. 点「发送消息」→「一对多消息」，复制你的 Token
+3. 将 `notify.py.example` 重命名为 `notify.py`，填入 Token：

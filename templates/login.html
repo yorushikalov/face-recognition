@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - AI 人脸识别系统</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <h1 class="auth-title">AI 人脸识别系统</h1>
+
+            <!-- Flash 消息 -->
+            <div id="auth-message" class="auth-message" style="display:none"></div>
+
+            <!-- ===== 密码登录表单（默认显示） ===== -->
+            <div id="form-password" class="auth-form">
+                <div class="form-group">
+                    <label>用户名</label>
+                    <input type="text" id="login-username" placeholder="请输入用户名" autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label>密码</label>
+                    <input type="password" id="login-password" placeholder="请输入密码" autocomplete="current-password">
+                </div>
+                <button class="btn btn-primary" onclick="loginPassword()">登 录</button>
+            </div>
+
+            <!-- ===== 短信验证码登录表单（默认隐藏） ===== -->
+            <div id="form-sms" class="auth-form" style="display:none">
+                <div class="form-group">
+                    <label>手机号</label>
+                    <div class="input-row">
+                        <input type="tel" id="sms-phone" placeholder="请输入手机号" maxlength="11">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>验证码</label>
+                    <div class="input-row">
+                        <input type="text" id="sms-code" placeholder="请输入验证码" maxlength="6">
+                        <button class="btn btn-outline" id="btn-send-sms" onclick="sendSMS()">获取验证码</button>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="loginSMS()">验 证 登 录</button>
+            </div>
+
+            <!-- ===== 人脸识别登录（默认隐藏） ===== -->
+            <div id="form-face" class="auth-form" style="display:none">
+                <div class="face-login-area">
+                    <video id="face-video" autoplay playsinline muted></video>
+                    <canvas id="face-canvas" style="display:none"></canvas>
+                    <div id="face-status" class="face-status">请正对摄像头，点击下方按钮开始识别</div>
+                </div>
+                <button class="btn btn-primary" id="btn-face-login" onclick="startFaceLogin()">开始人脸识别</button>
+            </div>
+
+            <!-- ===== 底部切换选项 ===== -->
+            <div class="auth-switch">
+                <span class="switch-label">其他登录方式：</span>
+                <div class="switch-btns">
+                    <button class="switch-btn active" data-target="form-password">账号密码</button>
+                    <button class="switch-btn" data-target="form-sms">手机验证码</button>
+                    <button class="switch-btn" data-target="form-face">人脸识别</button>
+                </div>
+                <a href="{{ url_for('register_page') }}" class="register-link">注册账号</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+</body>
+</html>

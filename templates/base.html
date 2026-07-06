@@ -16,6 +16,12 @@
                 <li><a href="/" class="{% if request.path == '/' %}active{% endif %}">首页</a></li>
                 <li><a href="/camera" class="{% if request.path == '/camera' %}active{% endif %}">📷 摄像头识别</a></li>
                 <li><a href="/upload" class="{% if request.path == '/upload' %}active{% endif %}">📤 上传识别</a></li>
+                {% if session.user_id %}
+                <li><a href="/dashboard">👤 个人中心</a></li>
+                <li><a href="/logout">🚪 退出</a></li>
+                {% else %}
+                <li><a href="/login" class="nav-login-btn">🔐 登录</a></li>
+                {% endif %}
             </ul>
         </div>
     </nav>
